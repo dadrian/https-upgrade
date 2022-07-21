@@ -24,10 +24,15 @@ containing thousands or millions of sites that need to be updated.
 ## Proposed Behavior Change
 
 The browser will automatically and optimistically upgrade all in-page HTTP links
-to HTTPS, with fast fallback to HTTP.
+to HTTPS, with fast fallback to HTTP. 
 
-* TODO: reference spec change
-* TODO: describe opt-out header
+The browser may optionally respect an opt-out header, which will cause the
+browser to consider an HTTPS upgrade as having failed, regardless of status code
+or content. This allows web servers that serve different content on HTTP and
+HTTPS to prevent autoupgrades.
+
+The upgrade behavior will require a small change to the fetch spec once the
+browser behavior is finalized.
 
 ## Security and Privacy Considerations
 
@@ -40,6 +45,15 @@ attempt to load it over HTTPS.
 
 ## Risks
 
-TODO
+If a large number of sites serve different content on HTTPS than HTTP,
+automatically upgrading links may make it difficult for a user to access the
+"correct" version of a page. [Previous work][levin-upgrades] from 2020 estimates
+1-3% of sites have at least 1 page that differs between HTTP and HTTPS. It is
+unclear how that translates into percentage of total pageloads, or how that
+translates into visible user impact.
+
+Content equivalence is difficult to measure. Browsers will have to rely on
+feedback from experimentation to determine the impact of unwanted upgrades. The
+opt-out header may be used by site administrators to prevent unwanted upgrades.
 
 [preload]: https://hstspreload.org
