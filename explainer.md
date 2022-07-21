@@ -57,3 +57,4 @@ feedback from experimentation to determine the impact of unwanted upgrades. The
 opt-out header may be used by site administrators to prevent unwanted upgrades.
 
 [preload]: https://hstspreload.org
+[levin-upgrades]: https://www.cs.umd.edu/~dml/papers/https_tma20.pdf
