@@ -31,6 +31,9 @@ browser to consider an HTTPS upgrade as having failed, regardless of status code
 or content. This allows web servers that serve different content on HTTP and
 HTTPS to prevent autoupgrades.
 
+The browser may choose to upgrade active and passive mixed content in addition
+to upgrading links.
+
 The upgrade behavior will require a small change to the fetch spec once the
 browser behavior is finalized.
 
