@@ -70,6 +70,15 @@ off than the status quo, where the link would be accessed over HTTP with no
 attempt to load it over HTTPS. This change does limit information observable to
 a purely passive attacker.
 
+Silently upgrading HTTP URLs could have negative effects on the ecosystem by
+removing the incentive for developers to fix HTTP references, or making it less
+likely that they are aware of them at all. However, with many browsers already
+aggressively marking HTTP pages as "Not secure", it is unclear what additional
+incentives could be used to get developers to fix HTTP links that could be HTTPS.
+Further, many such websites might be unmaintained or infrequently updated. By
+attempting to upgrade navigations to HTTPS, browsers protect users' privacy on
+websites that wouldn't ever get updated to point to HTTPS directly.
+
 ## Risks
 
 If a large number of sites serve different content on HTTPS than HTTP,
