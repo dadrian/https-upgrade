@@ -49,9 +49,14 @@ regardless of the upgrade-insecure-requests mechanism.
 * The new step 5 of Main fetch should set a flag on the request to indicate that
 an upgrade has been attempted, for http:// requests that were upgraded to https://.
 * The [HTTP fetch](https://fetch.spec.whatwg.org/#http-fetch) algorithm should check for
-a network error or HTTP error status on upgraded requests. Step 8 of this algorithm
-should also be modified to synthesize a redirect from the https:// URL to the http:// URL
-and call into HTTP-redirect fetch.
+a network error or HTTP error status on upgraded requests. Step 8 of this algorithm should
+also be modified to synthesize a redirect from the https:// URL to the http:// URL and call
+into HTTP-redirect fetch, when `upgrade-insecure-requests` is not in use (as determined by
+[checking](https://w3c.github.io/webappsec-upgrade-insecure-requests/#should-upgrade-for-client)
+the client's responsible document's or responsible browsing context's insecure requests policy).
+Requests should not fall back to http:// when `upgrade-insecure-requests` is in effect
+because that would be a security regression for websites that are currently using
+`upgrade-insecure-requests`.
 
 Main fetch should not upgrade requests that have already been upgraded. Edge cases that
 will need consideration include: https:// URLs that redirect to http://, whether
