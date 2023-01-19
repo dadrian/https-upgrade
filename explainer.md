@@ -72,9 +72,14 @@ need consideration include:
   be upgraded.
 * **POST requests**: HTTPS Upgrade only affects _idempotent_ requests (i.e.
   `GET`). Forms on upgraded pages should follow existing mixed content policies.
-* **Redirects to HTTP**: If an upgraded connection results in a redirect back to
-  HTTP, it should be considered a failed upgrade.
-
+* **Redirects to HTTP**: If a navigation would result in a redirect to HTTP,
+  that redirection should also get upgraded to HTTPS. This applies both to
+  navigations that are initially to HTTP URLs which get upgraded to HTTPS (and
+  then redirected to an HTTP URL) and to navigations that are initially to HTTPS
+  URLs that are redirected to HTTP. If these upgrades result in a redirect loop
+  (for example, https://http.badssl.com/ redirects to http://http.badssl.com,
+  which would be upgraded to https://http.badssl.com/, and so on), this should
+  be considered a failed upgrade.
 
 ## Security and Privacy Considerations
 
