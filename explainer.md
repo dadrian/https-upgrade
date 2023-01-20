@@ -59,11 +59,27 @@ because that would be a security regression for websites that are currently usin
 `upgrade-insecure-requests`.
 
 Main fetch should not upgrade requests that have already been upgraded. Edge cases that
-will need consideration include: https:// URLs that redirect to http://, whether
-subresources need to be differentiated from navigation requests, and how to differentiate
-navigation requests that should be upgraded from those that shouldn’t (for example, URLs
-that are typed with an explicit “http://” scheme in the browser address bar).
-
+need consideration include:
+* **Subresources**: HTTPS Upgrade only affects main-frame navigations.
+  Subresource upgrades are controlled by the user agent's
+  policies on mixed content (i.e. autoupgrading passive mixed content). A page
+  that is upgraded to HTTPS should follow existing policies for mixed content.
+* **URL bar navigations**: Navigations to URLs typed into the URL bar are left
+  to the discretion of the user agent, which may already upgrade unschemed
+  navigations. User agents may choose to treat URLs entered with an explicit
+  "http://" scheme as an "escape hatch" from HTTPS Upgrades.
+* **Javascript Navigations**: Navigations via `window.location` are elligible to
+  be upgraded.
+* **POST requests**: HTTPS Upgrade only affects _idempotent_ requests (i.e.
+  `GET`). Forms on upgraded pages should follow existing mixed content policies.
+* **Redirects to HTTP**: If a navigation would result in a redirect to HTTP,
+  that redirection should also get upgraded to HTTPS. This applies both to
+  navigations that are initially to HTTP URLs which get upgraded to HTTPS (and
+  then redirected to an HTTP URL) and to navigations that are initially to HTTPS
+  URLs that are redirected to HTTP. If these upgrades result in a redirect loop
+  (for example, https://http.badssl.com/ redirects to http://http.badssl.com,
+  which would be upgraded to https://http.badssl.com/, and so on), this should
+  be considered a failed upgrade.
 
 ## Security and Privacy Considerations
 
