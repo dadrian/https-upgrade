@@ -1,6 +1,6 @@
 # HTTPS Upgrade - Explainer
 
-Authors: dadrian@google.com, jdeblasio@chromium.org, estark@chromium.org \[your name here]
+Authors: dadrian@google.com, jdeblasio@chromium.org, estark@chromium.org, cthomp@chromium.org \[your name here]
 
 ## The problem
 
@@ -41,22 +41,14 @@ before performing POST requests as in form submissions.
 The upgrade behavior will require changes to the Fetch spec once the
 browser behavior is finalized:
 
-* Step 5 of [Main fetch](https://fetch.spec.whatwg.org/#main-fetch) currently upgrades
-requests based on the
-[upgrade-insecure-requests](https://w3c.github.io/webappsec-upgrade-insecure-requests/#upgrade-request)
-mechanism. This will be replaced to upgrade navigation requests (and possibly subresources)
-regardless of the upgrade-insecure-requests mechanism.
-* The new step 5 of Main fetch should set a flag on the request to indicate that
-an upgrade has been attempted, for http:// requests that were upgraded to https://.
-* The [HTTP fetch](https://fetch.spec.whatwg.org/#http-fetch) algorithm should check for
-a network error or HTTP error status on upgraded requests. Step 8 of this algorithm should
-also be modified to synthesize a redirect from the https:// URL to the http:// URL and call
-into HTTP-redirect fetch, when `upgrade-insecure-requests` is not in use (as determined by
-[checking](https://w3c.github.io/webappsec-upgrade-insecure-requests/#should-upgrade-for-client)
-the client's responsible document's or responsible browsing context's insecure requests policy).
-Requests should not fall back to http:// when `upgrade-insecure-requests` is in effect
-because that would be a security regression for websites that are currently using
-`upgrade-insecure-requests`.
+* A new step will be added after step 5 of
+  [Main fetch](https://fetch.spec.whatwg.org/#main-fetch) to upgrade main-frame
+  navigation requests from http:// to https://. These upgraded requests will get
+  tagged and the original http:// request URL saved (the "fallback URL").
+* The [HTTP fetch](https://fetch.spec.whatwg.org/#http-fetch) algorithm should
+  check for network error status on upgraded requests. If the request was upgraded
+  and the response was a network error, then this algorithm should initiate
+  fallback to the saved fallback URL.
 
 Main fetch should not upgrade requests that have already been upgraded. Edge cases that
 need consideration include:
