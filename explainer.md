@@ -34,12 +34,6 @@ browser to consider an HTTPS upgrade as having failed, regardless of status code
 or content. This allows web servers that serve different content on HTTP and
 HTTPS to prevent autoupgrades.
 
-HTTPS Upgrades are independent of subresource mixed content. The browser should 
-continue to upgrade Upgradeable mixed content, and block Blockable mixed content,
-based on the security state of the main frame, regardless of if the main frame was
-upgraded or not. The browser may also choose to upgrade and/or warn the user
-before performing POST requests as in form submissions.
-
 The upgrade behavior will require changes to the Fetch spec once the
 browser behavior is finalized:
 
@@ -56,8 +50,9 @@ Main fetch should not upgrade requests that have already been upgraded. Edge cas
 need consideration include:
 * **Subresources**: HTTPS Upgrade only affects main-frame navigations.
   Subresource upgrades are controlled by the user agent's
-  policies on mixed content (i.e. autoupgrading passive mixed content). A page
-  that is upgraded to HTTPS should follow existing policies for mixed content.
+  policies on Blockable and Upgradeable mixed content (i.e. autoupgrading Upgradeable
+  mixed content). A page that is upgraded to HTTPS should follow existing policies for
+  mixed content.
 * **URL bar navigations**: Navigations to URLs typed into the URL bar are left
   to the discretion of the user agent, which may already upgrade unschemed
   navigations. User agents may choose to treat URLs entered with an explicit
