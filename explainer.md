@@ -34,8 +34,10 @@ browser to consider an HTTPS upgrade as having failed, regardless of status code
 or content. This allows web servers that serve different content on HTTP and
 HTTPS to prevent autoupgrades.
 
-The browser may choose to upgrade active and passive mixed content in addition
-to upgrading links. The browser may also choose to upgrade and/or warn the user
+HTTPS Upgrades are independent of subresource mixed content. The browser should 
+continue to upgrade Upgradeable mixed content, and block Blockable mixed content,
+based on the security state of the main frame, regardless of if the main frame was
+upgraded or not. The browser may also choose to upgrade and/or warn the user
 before performing POST requests as in form submissions.
 
 The upgrade behavior will require changes to the Fetch spec once the
